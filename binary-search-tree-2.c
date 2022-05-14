@@ -156,12 +156,12 @@ void iterativeInorder(Node* node)
 {
 	for ( ; ; ) {
 		for ( ; node; node = node->left) {
-			push(node);						//왼쪽 노드가 NULL이 될때까지 스택에 노드를 삽입
+			push(node);			//왼쪽 노드가 NULL이 될때까지 스택에 노드를 삽입
 		}
-		node = pop();						//가장 왼쪽 노드를 스택에서 삭제
-		if (!node) break;					//스택이 공백이 되면 반복문 종료
+		node = pop();				//가장 왼쪽 노드를 스택에서 삭제
+		if (!node) break;			//스택이 공백이 되면 반복문 종료
 		printf(" [%d] ", node->key);		//노드의 키값 출력
-		node = node->right;					//오른쪽 노드로 이동
+		node = node->right;			//오른쪽 노드로 이동
 	}
 }
 
@@ -170,20 +170,20 @@ void iterativeInorder(Node* node)
  */
 void levelOrder(Node* ptr)
 {
-	if (!ptr) return;					//공백 트리인 경우 함수를 종료
-	enQueue(ptr);						//큐에 루트 노드를 삽입
+	if (!ptr) return;				//공백 트리인 경우 함수를 종료
+	enQueue(ptr);					//큐에 루트 노드를 삽입
 	for ( ; ; ) {
-		ptr = deQueue();				//루트 노드를 큐에서 삭제시킨 노드로 초기화
-		if (ptr) {						//큐가 공백이 아닌 경우
-			printf(" [%d] ", ptr->key);	//
-			if (ptr->left) {
-				enQueue(ptr->left);
+		ptr = deQueue();			//루트 노드를 큐에서 삭제시킨 노드로 초기화
+		if (ptr) {				//큐가 공백이 아닌 경우
+			printf(" [%d] ", ptr->key);	//노드의 키값 출력
+			if (ptr->left) {		//ptr의 왼쪽 노드가 존재하는 경우
+				enQueue(ptr->left);	//큐에 왼쪽 노드 삽입
 			}
-			if (ptr->right) {
-				enQueue(ptr->right);
+			if (ptr->right) {		//ptr의 오른쪽 노드가 존재하는 경우
+				enQueue(ptr->right);	//오른쪽 노드 삽입
 			}
 		}
-		else break;						//큐가 공백인 경우 함수 종료
+		else break;				//큐가 공백인 경우 함수 종료
 	}
 }
 
