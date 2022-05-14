@@ -234,6 +234,91 @@ int insert(Node* head, int key)
 
 int deleteNode(Node* head, int key)
 {
+	if (head == NULL) {			//헤드 노드가 비어있는 경우
+		printf("Nothing to delete!\n");	//오류 메시지 출력
+		return -1;			//비정상 함수 종료
+	}
+
+	if (head->left == NULL) {		//헤드 노드의 왼쪽 서브 트리가 비어있는 경우
+		printf("Nothing to delete!\n");	//오류 메시지 출력
+		return -1;			//비정상 함수 종료
+	}
+
+	Node* root = head->left;	//루트 노드를 저장할 노드 선언 및 헤드 노드의 왼쪽 서브 트리로 초기화
+	Node* par = NULL;		//부모 노드를 저장할 노드 선언
+	Node* temp = root;		//탐색할 노드를 저장할 노드 선언 및 루트 노드로 초기화
+
+	while ((temp != NULL) && (temp->key != key)) {	//temp노드가 NULL이 되거나 입력 받은 키값과 일치하는 노드를 찾을때까지 반복
+		if (temp->key != key) {				//temp노드의 키값이 입력 받은 키값과 일치하지 않는 경우
+			par = temp;				//부모 노드를 temp노드로 초기화
+			if (temp->key > key) temp = temp->left;	//temp노드의 키값이 입력 받은 키값보다 큰 경우 temp노드를 왼쪽 서브트리로 이동
+			else temp = temp->right;		//작은 경우 오른쪽 서브트리로 이동
+		}
+	}
+
+	if (temp == NULL) {				//입력 받은 키값을 찾지 못한경우
+		printf("No node for key [%d]\n", key);	//오류 메시지 출력
+		return -1;				//비정상 함수 종료
+	}
+
+	if ((temp->left == NULL) && (temp->right == NULL)) {	//탐색한 노드가 리프 노드인 경우
+		if (par != NULL) {				//부모 노드가 존재하는 경우
+			if (par->left == temp) {		//부모 노드의 왼쪽 서브트리가 탐색한 노드인 경우
+				par->left = NULL;		//왼쪽 서브트리를 NULL로 초기화
+			}
+			else if (par->right == temp) {	//오른쪽 서브트리가 탐색한 노드인 경우
+				par->right = NULL;	//오른쪽 서브트리를 NULL로 초기화
+			}
+		}
+		else head->left = NULL;	//부모 노드가 존재하지 않는 경우, 즉 탐색한 노드가 루트 노드인 경우 루트 노드를 NULL로 초기화
+
+		free(temp);	//탐색한 노드의 메모리를 해제
+		return 1;	//함수 종료
+	}
+
+	if ((temp->left == NULL) || (temp->right == NULL)) {	//탐색한 노드가 자식 노드를 한 개 가진 경우
+		Node* child;			//자식 노드를 저장할 노드 선언
+		if (temp->left != NULL) {	//탐색한 노드의 왼쪽 서브트리에 자식 노드가 있는 경우
+			child = temp->left;	//child 노드를 탐색한 노드의 왼쪽 서브트리로 초기화
+		}
+		if (temp->right != NULL) {	//오른쪽 서브트리에 자식 노드가 있는 경우
+			child = temp->right;	//child 노드를 오른쪽 서브트리로 초기화
+		}
+
+		if (par != NULL) {			//부모 노드가 존재하는 경우
+			if (par->left = temp) {		//부모 노드의 왼쪽 서브트리가 탐색한 노드인 경우
+				par->left = child;	//부모 노드의 왼쪽 서브트리를 자식 노드로 초기화
+			}
+			if (par->right = temp) {	//오른쪽 서브트리가 탐색한 노드인 경우
+				par->right = child;	//오른쪽 서브트리를 자식 노드로 초기화
+			}
+		}
+		else root = child;	//부모 노드가 존재하지 않는 경우, 즉 탐색한 노드가 루트 노드인 경우 루트 노드를 자식 노드로 초기화
+
+		free(temp);	//탐색한 노드의 메모리를 해제
+		return 1;	//함수 종료
+	}
+
+	Node* candidate;		//후계자를 탐색할 노드 선언
+	par = temp;			//부모 노드를 탐색한 노드로 초기화
+	candidate = temp->right;	//후계자 노드를 탐색한 노드의 오른쪽 서브트리로 초기화
+
+	while (candidate->left != NULL) {	//후계자 노드의 왼쪽 서브트리가 NULL이 될때까지 반복
+		par = candidate;		//부모 노드를 후계자 노드로 초기화
+		candidate = candidate->left;	//후계자 노드를 왼쪽 서브트리로 이동
+	}
+
+	if (par->right == candidate) {		//부모 노드의 오른쪽 서브트리가 후계자 노드일 경우
+		par->right = candidate->right;	//부모 노드의 오른쪽 서브트리를 후계자 노드의 오른쪽 서브트리로 초기화
+	}
+	else {					//후계자 노드가 아닌 경우
+		par->left = candidate->right;	//부모 노드의 왼쪽 서브트리를 후계자 노드의 오른쪽 서브트리로 초기화
+	}
+
+	temp->key = candidate->key;		//탐색한 노드의 키값을 후계자 노드의 키값으로 초기화
+
+	free(candidate);	//후계자 노드의 메모리를 해제
+	return 1;		//함수 종료
 }
 
 
