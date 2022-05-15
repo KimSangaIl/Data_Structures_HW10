@@ -173,7 +173,7 @@ void levelOrder(Node* ptr)
 	if (!ptr) return;				//공백 트리인 경우 함수를 종료
 	enQueue(ptr);					//큐에 루트 노드를 삽입
 	for ( ; ; ) {
-		ptr = deQueue();			//루트 노드를 큐에서 삭제시킨 노드로 초기화
+		ptr = deQueue();			//큐에서 원소를 하나 삭제
 		if (ptr) {				//큐가 공백이 아닌 경우
 			printf(" [%d] ", ptr->key);	//노드의 키값 출력
 			if (ptr->left) {		//ptr의 왼쪽 노드가 존재하는 경우
@@ -352,23 +352,27 @@ int freeBST(Node* head)
 
 Node* pop()
 {
+	if (top < 0) return NULL;	//스택이 비어있는 경우 비정상 함수 종료
+	return stack[top--];		//탑에 있는 원소를 삭제하고 탑 위치를 1 감소
 }
 
 void push(Node* aNode)
 {
+	stack[++top] = aNode;	//탑 위치를 1 증가시키고 탑에 aNode 원소 추가
 }
 
 
 
 Node* deQueue()
 {
+	if (front == rear) return NULL;		//원형 큐가 비어있는 경우 비정상 함수 종료
+	front = (front + 1) % MAX_QUEUE_SIZE;	//front 위치를 한칸 뒤로 초기화
+	return queue[front];			//front 자리에 있는 원형 큐의 원소를 삭제
 }
 
 void enQueue(Node* aNode)
 {
+	rear = (rear + 1) % MAX_QUEUE_SIZE;	//rear 위치를 한칸 뒤로 초기화
+	if (front == rear) return;		//원형 큐가 포화상태인 경우 비정상 함수 종료
+	queue[rear] = aNode;			//rear 자리에 aNode 원소 추가
 }
-
-
-
-
-
