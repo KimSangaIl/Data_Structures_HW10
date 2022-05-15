@@ -376,3 +376,12 @@ void enQueue(Node* aNode)
 	if (front == rear) return;		//원형 큐가 포화상태인 경우 비정상 함수 종료
 	queue[rear] = aNode;			//rear 자리에 aNode 원소 추가
 }
+
+void printStack()
+{
+	int i = 0;
+	printf("--- stack ---\n");
+	while(i <= top)	{					//스택 탑까지 반복
+		printf("stack[%d] = %d\n", i, stack[i]->key);	//스택 원소 출력
+	}
+}
